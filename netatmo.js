@@ -614,6 +614,73 @@ netatmo.prototype.getHomeData = function (options, callback) {
   return this;
 };
 
+
+
+//NEW API STUFF
+
+/**
+ * homesdata
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHomesData = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHomesData(options, callback);
+    });
+  }
+
+  var url = util.format('%s/api/gethomesdata', BASE_URL);
+
+  var form = {
+    access_token: access_token
+  };
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  if (options) {
+    if (options.home_id) {
+      form.home_id = options.home_id;
+    }
+    if (options.gateway_types) {
+      form.gateway_types = options.gateway_types;
+    }
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "getHomesData error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('get-homesdata', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+
+// -------
+
+
+
 /**
  * https://dev.netatmo.com/dev/resources/technical/reference/welcome/getnextevents
  * @param options
