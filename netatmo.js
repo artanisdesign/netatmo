@@ -687,7 +687,7 @@ netatmo.prototype.getHomeStatus = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
     return this.on('authenticated', function () {
-      this.getHomestatus(options, callback);
+      this.getHomeStatus(options, callback);
     });
   }
 
