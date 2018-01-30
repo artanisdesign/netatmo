@@ -632,7 +632,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
     });
   }
 
-  var url = util.format('%s/api/gethomesdata', BASE_URL);
+  var url = util.format('%s/api/homesdata', BASE_URL);
 
   var form = {
     access_token: access_token
@@ -658,7 +658,7 @@ netatmo.prototype.getHomesData = function (options, callback) {
     form: form,
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      return this.handleRequestError(err, response, body, "getHomesData error");
+      return this.handleRequestError(err, response, body, "HomesData error");
     }
 
     body = JSON.parse(body);
@@ -676,6 +676,64 @@ netatmo.prototype.getHomesData = function (options, callback) {
   return this;
 };
 
+
+/**
+ * homestatus api
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.getHomeStatus = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.getHomestatus(options, callback);
+    });
+  }
+
+  var url = util.format('%s/api/homestatus', BASE_URL);
+
+  var form = {
+    access_token: access_token
+  };
+
+  if (options != null && callback == null) {
+    callback = options;
+    options = null;
+  }
+
+  if (options) {
+    if (options.home_id) {
+      form.home_id = options.home_id;
+    }
+    if (options.device_type) {
+      form.device_type = options.device_type;
+    }
+  }
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "Home Status error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('home-status-data', err, body.body);
+
+    if (callback) {
+      return callback(err, body.body);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
 
 // -------
 
