@@ -382,7 +382,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
     form: form,
   }, function (err, response, body) {
     if (err || response.statusCode != 200) {
-      var error = this.handleRequestError(err, response, body, "getMeasure error");
+      var error = this.handleRequestError(err, response, body, "getRoomMeasure error");
       if (callback) {
         callback(error);
       }
@@ -393,7 +393,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
 
     var measure = body.body;
 
-    this.emit('get-measure', err, measure);
+    this.emit('get-room-measure', err, measure);
 
     if (callback) {
       return callback(err, measure);
