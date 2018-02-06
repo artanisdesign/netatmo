@@ -284,36 +284,41 @@ netatmo.prototype.getThermostatsData = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/common/getmeasure
+ * getRoomMeasure
  * @param options
  * @param callback
  * @returns {*}
  */
-netatmo.prototype.getMeasure = function (options, callback) {
+netatmo.prototype.getRoomMeasure = function (options, callback) {
   // Wait until authenticated.
   if (!access_token) {
     return this.on('authenticated', function () {
-      this.getMeasure(options, callback);
+      this.getRoomMeasure(options, callback);
     });
   }
 
   if (!options) {
-    this.emit("error", new Error("getMeasure 'options' not set."));
+    this.emit("error", new Error("getRoomMeasure 'options' not set."));
     return this;
   }
 
-  if (!options.device_id) {
-    this.emit("error", new Error("getMeasure 'device_id' not set."));
+  if (!options.home_id) {
+    this.emit("error", new Error("getRoomMeasure 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.room_id) {
+    this.emit("error", new Error("getRoomMeasure 'room_id' not set."));
     return this;
   }
 
   if (!options.scale) {
-    this.emit("error", new Error("getMeasure 'scale' not set."));
+    this.emit("error", new Error("getRoomMeasure 'scale' not set."));
     return this;
   }
 
   if (!options.type) {
-    this.emit("error", new Error("getMeasure 'type' not set."));
+    this.emit("error", new Error("getRoomMeasure 'type' not set."));
     return this;
   }
 
@@ -325,20 +330,17 @@ netatmo.prototype.getMeasure = function (options, callback) {
   options.type = options.type.replace(/\s/g, '').toLowerCase();
 
 
-  var url = util.format('%s/api/getmeasure', BASE_URL);
+  var url = util.format('%s/api/getroommeasure', BASE_URL);
 
   var form = {
     access_token: access_token,
-    device_id: options.device_id,
+    home_id: options.home_id,
+    room_id: options.room_id,
     scale: options.scale,
     type: options.type,
   };
 
   if (options) {
-
-    if (options.module_id) {
-      form.module_id = options.module_id;
-    }
 
     if (options.date_begin) {
       if (options.date_begin <= 1E10) {
