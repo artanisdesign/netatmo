@@ -498,7 +498,7 @@ netatmo.prototype.getHomeData = function (options, callback) {
 
 
 //NEW API STUFF
-
+//********************************************************************************************************************************** */
 /**
  * homesdata
  * @param options
@@ -820,7 +820,81 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
   return this;
 };
 
-// -------
+/**
+ * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
+ * @param options
+ * @param callback
+ * @returns {*}
+ */
+netatmo.prototype.setSyncScheduleHome = function (options, callback) {
+  // Wait until authenticated.
+  if (!access_token) {
+    return this.on('authenticated', function () {
+      this.setSyncScheduleHome(options, callback);
+    });
+  }
+
+  if (!options) {
+    this.emit("error", new Error("setSyncScheduleHome 'options' not set."));
+    return this;
+  }
+
+  if (!options.home_id) {
+    this.emit("error", new Error("setSyncScheduleHome 'home_id' not set."));
+    return this;
+  }
+
+  if (!options.zones) {
+    this.emit("error", new Error("setSyncScheduleHome 'zones' not set."));
+    return this;
+  }
+
+  if (!options.timetable) {
+    this.emit("error", new Error("setSyncScheduleHome 'timetable' not set."));
+    return this;
+  }
+  if (!options.schedule_id) {
+    this.emit("error", new Error("setSyncScheduleHome 'schedule_id' not set."));
+    return this;
+  }
+
+  var url = util.format('%s/api/syncschedule', BASE_URL);
+
+  var form = {
+    access_token: access_token,
+    home_id: options.home_id,
+    zones: options.zones,
+    timetable: options.timetable,
+    schedule_id : options.schedule_id,
+    hg_temp : options.hg_temp || 10,
+    away_temp: options.away_temp || 15
+  };
+
+  request({
+    url: url,
+    method: "POST",
+    form: form,
+  }, function (err, response, body) {
+    if (err || response.statusCode != 200) {
+      return this.handleRequestError(err, response, body, "setSyncScheduleHome error");
+    }
+
+    body = JSON.parse(body);
+
+    this.emit('set-syncschedulehome', err, body.status);
+
+    if (callback) {
+      return callback(err, body.status);
+    }
+
+    return this;
+
+  }.bind(this));
+
+  return this;
+};
+
+// ------- *************************************************************************************************************
 
 
 
