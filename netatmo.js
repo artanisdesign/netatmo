@@ -857,6 +857,10 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     this.emit("error", new Error("setSyncScheduleHome 'schedule_id' not set."));
     return this;
   }
+  if (!options.name) {
+    this.emit("error", new Error("setSyncScheduleHome 'name' not set."));
+    return this;
+  }
 
   var url = util.format('%s/api/syncschedule', BASE_URL);
 
@@ -883,8 +887,6 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     }
 
     body = JSON.parse(body);
-    console.log(response);
-    console.log(body);
 
     this.emit('set-syncschedulehome', err, body.status);
 
