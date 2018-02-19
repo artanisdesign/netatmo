@@ -867,7 +867,8 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     timetable: options.timetable,
     schedule_id : options.schedule_id,
     hg_temp : options.hg_temp || 10,
-    away_temp: options.away_temp || 15
+    away_temp: options.away_temp || 15,
+    name : options.name
   };
 
   console.log(form);
