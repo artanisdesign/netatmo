@@ -821,7 +821,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
 };
 
 /**
- * https://dev.netatmo.com/dev/resources/technical/reference/thermostat/syncschedule
+ * SYNCSCHEDULE
  * @param options
  * @param callback
  * @returns {*}
@@ -880,6 +880,8 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     }
 
     body = JSON.parse(body);
+    console.log(response);
+    console.log(body);
 
     this.emit('set-syncschedulehome', err, body.status);
 
