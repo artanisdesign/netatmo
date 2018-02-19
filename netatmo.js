@@ -870,6 +870,8 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     away_temp: options.away_temp || 15
   };
 
+  console.log(form);
+
   request({
     url: url,
     method: "POST",
