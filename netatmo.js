@@ -875,7 +875,7 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     name : options.name
   };
 
-  console.log(form);
+  //console.log(form);
 
   request({
     url: url,
