@@ -304,7 +304,7 @@ api.on("warning", function(error) {
 // Rest of program
 ```
 ## New features
-See the netatmo.js, it has got a few new features to the API, like "setSyncScheduleHome", "getRoomMeasure", "setRoomThermpoint", "getHomeStatus". 
+See the netatmo.js, it has got a few new features to the API, like "setSyncScheduleHome", "getRoomMeasure", "setRoomThermpoint", "getHomeStatus", "getHomesData". 
 
 ## License
 
