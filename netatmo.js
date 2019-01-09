@@ -862,7 +862,7 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     return this;
   }
 
-  var url = util.format('%s/api/syncschedule', BASE_URL);
+  var url = util.format('%s/api/synchomeschedule', BASE_URL);
 
   var form = {
     access_token: access_token,
