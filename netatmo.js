@@ -3,8 +3,6 @@ var EventEmitter = require("events").EventEmitter;
 var request = require('request');
 var moment = require('moment');
 
-EventEmitter.setMaxListeners(0)
-
 const BASE_URL = 'https://api.netatmo.com';
 
 var username;
@@ -21,6 +19,7 @@ var access_token;
 var netatmo = function (args) {
   EventEmitter.call(this);
   this.authenticate(args);
+  this.setMaxListeners(0);
 };
 
 util.inherits(netatmo, EventEmitter);
