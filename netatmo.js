@@ -3,6 +3,8 @@ var EventEmitter = require("events").EventEmitter;
 var request = require('request');
 var moment = require('moment');
 
+EventEmitter.setMaxListeners(0)
+
 const BASE_URL = 'https://api.netatmo.com';
 
 var username;
