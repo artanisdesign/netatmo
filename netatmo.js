@@ -11,14 +11,15 @@ var client_id;
 var client_secret;
 var scope;
 var access_token;
+var expires_in;
 
 /**
  * @constructor
  * @param args
  */
-var netatmo = function (args) {
+var netatmo = function (args, callback) {
   EventEmitter.call(this);
-  this.authenticate(args);
+  this.authenticate(args, callback);
   this.setMaxListeners(0);
 };
 
@@ -121,13 +122,17 @@ netatmo.prototype.authenticate = function (args, callback) {
     access_token = body.access_token;
 
     if (body.expires_in) {
+      expires_in = body.expires_in * 1000;
       setTimeout(this.authenticate_refresh.bind(this), body.expires_in * 1000, body.refresh_token);
     }
 
     this.emit('authenticated');
 
     if (callback) {
-      return callback();
+      return callback({
+        access_token: body.access_token,
+        expires_in: body.expires_in * 1000
+      });
     }
 
     return this;
@@ -736,10 +741,10 @@ netatmo.prototype.setThermMode = function (options, callback) {
 
   var form = {
     access_token: access_token,
-    home_id: options.home_id,  
+    home_id: options.home_id,
     mode: options.mode
   };
-  
+
   if (options) {
 
     if (options.endtime) {
@@ -816,7 +821,7 @@ netatmo.prototype.getRoomMeasure = function (options, callback) {
     return this;
   }
 
-  if (util.isArray(options.type)) {
+  if (Array.isArray(options.type)) {
     options.type = options.type.join(',');
   }
 
@@ -949,10 +954,10 @@ netatmo.prototype.setSyncScheduleHome = function (options, callback) {
     home_id: options.home_id,
     zones: options.zones,
     timetable: options.timetable,
-    schedule_id : options.schedule_id,
-    hg_temp : options.hg_temp || 10,
+    schedule_id: options.schedule_id,
+    hg_temp: options.hg_temp || 10,
     away_temp: options.away_temp || 15,
-    name : options.name
+    name: options.name
   };
 
   //console.log(form);
